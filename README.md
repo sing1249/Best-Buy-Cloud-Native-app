@@ -15,3 +15,13 @@ The following diagram shown represents the architecture of the app and how the s
 | **Store Admin**     | [sing1249/store-admin](https://hub.docker.com/repository/docker/sing1249/store-admin/tags) |
 | **AI Service**      | [sing1249/ai-service](https://hub.docker.com/repository/docker/sing1249/ai-service/tags) |
 | **Store Front**     | [sing1249/store-front](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
+
+
+| Service Name       | Github Repository Link                                           |
+|--------------------|------------------------------------------------------------------|
+| **Order Service**   | https://github.com/sing1249/order-service-bb.git|
+| **Product Service** | https://github.com/sing1249/product-service-bb.git|
+| **Makeline Service**| https://github.com/sing1249/makeline-bb.git |
+| **Store Admin**     | https://github.com/sing1249/store-admin-bb.git |
+| **AI Service**      | https://github.com/sing1249/ai-service-bb.git |
+| **Store Front**     | https://github.com/sing1249/store-front-bb.git|
