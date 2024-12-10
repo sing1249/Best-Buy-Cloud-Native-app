@@ -7,7 +7,7 @@ The following diagram shown represents the architecture of the app and how the s
 
 ## Docker images link:
 
-| Service Name       | Docker Repository Link                                           |
+| Service Name       | Docker Image Link                                           |
 |--------------------|------------------------------------------------------------------|
 | **Order Service**   | [sing1249/order-service](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
 | **Product Service** | [sing1249/product-service](https://hub.docker.com/repository/docker/sing1249/product-service/tags) |
