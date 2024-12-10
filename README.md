@@ -27,6 +27,10 @@ The following diagram shown represents the architecture of the app and how the s
 | **Store Front**     | https://github.com/sing1249/store-front-bb.git|
 
 
+## Youtube video link
+https://youtu.be/UQa1D2H8C0E 
+
+
 ## Issues or limitations in the implementation
 I was not able to connect the services using Azure service bus, for this I have tried changing the docker files to include env variables for Azure Service bus, modified the env variables in order-service and makeline-service and ensured they get the base64 encoded secret for Azure Service Bus from secrets.yaml but the solution did not work.
 So I have finished the project using RabbitMQ instead. 
