@@ -27,6 +27,10 @@ The following diagram shown represents the architecture of the app and how the s
 | **Store Front**     | https://github.com/sing1249/store-front-bb.git|
 
 
+## Youtube video link
+https://youtu.be/UQa1D2H8C0E 
+
+
 ## Issues or limitations in the implementation
 I was not able to connect the services using Azure service bus, for this I have tried changing the docker files to include env variables for Azure Service bus, modified the env variables in order-service and makeline-service and ensured they get the base64 encoded secret for Azure Service Bus from secrets.yaml but the solution did not work.
 So I have finished the project using RabbitMQ instead. 
@@ -39,3 +43,4 @@ So I tried deploying the AKS cluster and open AI in 2 different subscriptions. W
 To overcome this I used kubectl logs "pod name" which showed me that there was an authorization problem. 
 
 The Open AI resource was then deployed in the CDO subscription but since I had insufficient quota I could not deploy dall-e-3 and could only do dall-e-2 but when I chose dall-e-2 gpt-4 could not be deployed as they were available in different region so I chose dall-e-2 and gpt-40 and then that worked for me. 
+![](Screenshots/Quota.png)
