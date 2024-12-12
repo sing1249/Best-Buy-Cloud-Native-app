@@ -60,7 +60,7 @@ Each service can be deployed individually using its specific YAML file:
 kubectl apply -f <service-specific-file>.yaml
 ```
 
-## Youtube video link
+## Demo Video
 This the link for youtube video demo:
 https://youtu.be/UQa1D2H8C0E 
 
