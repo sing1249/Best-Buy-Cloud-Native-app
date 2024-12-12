@@ -13,7 +13,8 @@ The architecture represents receiving orders and completing them for Best Buy. B
 2. **Product-Service**: Acts as a database for all products Best Buy sells. The `store-front` fetches products from this service.
 3. **Store-Admin**: Used by the company to manage products and complete orders. It connects to `product-service` to add new products and `makeline-service` to store completed orders in the **Order Database** (MongoDB).
 4. **AI-Service**: Helps generate descriptions and images for new products. It integrates with `store-admin`, using Azure OpenAI services (DALL-E-3 and GPT-4) to generate content.
-5. **Order-Service**: Order-service sends the order to order queue for them to be completed. 
+5. **Order-Service**: Order-service sends the order to order queue for them to be completed.
+6. **Makeline-Service**: This service is used to send the completed orders to be stored in MongoDB.
 
 ## Deployment Instructions
 To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these steps:
