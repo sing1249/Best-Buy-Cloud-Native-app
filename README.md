@@ -39,7 +39,7 @@ To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these
 
 ### Deploying Services
 1. Connect to the AKS cluster via Azure Portal using the provided commands.
-2. Switch to the directory containing the deployment files.
+2. Switch to the directory Deployment Files in this repository.
 3. Apply the configuration files:
    - Deploy config maps and secrets:
      ```bash
@@ -50,7 +50,7 @@ To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these
      ```bash
      kubectl apply -f bestbuy-all-in-one.yaml
      ```
-4. Expose `store-front` and `store-admin` services via Load Balancer. Access them using the IP addresses provided in the Azure Portal under Services > Ingress.
+4. The `store-front` and `store-admin` services are exposed via Load Balancer as listed in the yaml file. They can be accessed  using the IP addresses provided in the Azure Portal under Services > Ingress.
 
 ### Deploying Individual Services
 Each service can be deployed individually using its specific YAML file:
