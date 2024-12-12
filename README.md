@@ -151,3 +151,7 @@ cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt
 
 ### Bonus: Deployment fail for some services
 I deleted the AKS cluster after 1-2 services to avoid any charges, because I had to do multiple attempts in making AKS, I wanted to minimize the cost as much as I could that is why some services might show deployment failed.
+
+## Citations
+- Used https://chatgpt.com/ for troubleshooting.
+- Used https://chatgpt.com/ for making the readme.md file more organized and to check grammatical errors.
