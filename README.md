@@ -5,17 +5,15 @@ The following diagram shown represents the architecture of the app and how the s
 ![ApplicationArchitecture](ApplicationArchitecture.png)
 
 
-## Docker images link:
+## Application and Architecture Explanation:
+The architecture represents the receivibg orders and completing the orders for Best Buy. In the diagram, store-front is used by employees to add orders in cart and then they are sent to order-service which is then connected to a managed backend service which is Azure Service Bus.
+The store-front fetches orders from product-service which acts as a database for all products Best Buy sells.
+Store-admin which is a service used by the company to manage products and manage/complete orders is also connected to product-service. If there is a new product that needs to be added it can be done using store-admin. The store-admin is connected to makeline service which is responsible for sending all completed orders that get completed using store-admin service and storing them into Order Database hosted on managed service (Mongo DB)
+AI-service is used to help create description of new products and images for the products. Store-admin has an integrated section to add products and if we add products we can add description by using keywords and generate images for products as well. Ai-service uses two AI models, Dall-e-3 and gpt-4 which are hosted using Azure Open AI service. 
 
-| Service Name       | Docker Image Link                                           |
-|--------------------|------------------------------------------------------------------|
-| **Order Service**   | [sing1249/order-service](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
-| **Product Service** | [sing1249/product-service](https://hub.docker.com/repository/docker/sing1249/product-service/tags) |
-| **Makeline Service**| [sing1249/makeline-service](https://hub.docker.com/repository/docker/sing1249/makeline-service/tags) |
-| **Store Admin**     | [sing1249/store-admin](https://hub.docker.com/repository/docker/sing1249/store-admin/tags) |
-| **AI Service**      | [sing1249/ai-service](https://hub.docker.com/repository/docker/sing1249/ai-service/tags) |
-| **Store Front**     | [sing1249/store-front](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
+## Deployment Instructions:
 
+## Table of Microservice Repositories:
 
 | Service Name       | Github Repository Link                                           |
 |--------------------|------------------------------------------------------------------|
@@ -27,11 +25,26 @@ The following diagram shown represents the architecture of the app and how the s
 | **Store Front**     | https://github.com/sing1249/store-front-bb.git|
 
 
+## Table of Docker Images:
+
+| Service Name       | Docker Image Link                                           |
+|--------------------|------------------------------------------------------------------|
+| **Order Service**   | [sing1249/order-service](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
+| **Product Service** | [sing1249/product-service](https://hub.docker.com/repository/docker/sing1249/product-service/tags) |
+| **Makeline Service**| [sing1249/makeline-service](https://hub.docker.com/repository/docker/sing1249/makeline-service/tags) |
+| **Store Admin**     | [sing1249/store-admin](https://hub.docker.com/repository/docker/sing1249/store-admin/tags) |
+| **AI Service**      | [sing1249/ai-service](https://hub.docker.com/repository/docker/sing1249/ai-service/tags) |
+| **Store Front**     | [sing1249/store-front](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
+
+
+
+
 ## Youtube video link
 https://youtu.be/UQa1D2H8C0E 
 
+## Bonus Task: Implement a CI/CD Pipeline for Each Microservice 
 
-## Issues or limitations in the implementation
+## Issues or limitations in the implementation:
 I was not able to connect the services using Azure service bus, for this I have tried changing the docker files to include env variables for Azure Service bus, modified the env variables in order-service and makeline-service and ensured they get the base64 encoded secret for Azure Service Bus from secrets.yaml but the solution did not work.
 So I have finished the project using RabbitMQ instead. 
 
