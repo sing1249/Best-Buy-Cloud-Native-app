@@ -20,16 +20,19 @@ Steps for deployment:
 3. A resource group Project2 was created in Azure Portal, and then we configured in AKS cluster in it.
 4. The cluster had 1 systemnodes and 2 workernodes. We configured manual scaling for them.
 5. Then Open AI resource was created in the same resource group. After the resource was created, we went into to deploy 2 deployments in this resource. One deployment will be gpt-4 and then other one would be dall-e-3. These services will be used to generate description and images for new products that can be added to Best Buy app.
-6. After the deployment of AI deployments, then the Endpoint was added under the env section of the AI service in the bestbuy-all-in-one.yaml file.
+6. After the deployment of AI deployments, then the Endpoint was added under the env section of the AI service in the bestbuy-all-in-one.yaml file which in available in Deployment Files folder.
 7. The key was copied and then base encoded 64 using echo -n "key" | base64.
 8. The encoded value was added to the secrets.yaml file.
 9. After this was done, we are now ready to connect to the cluster. It was connected by using the commands given in the connect section in Azure Portal under the cluster we just created.
-10. After successful connection, we then ran the command to deploy config maps and secrets in the cluster.
+10. After successful connection, switch the working directory to Deployment Files, if not done already, and then we then ran the command to deploy config maps and secrets in the cluster.
     - kubectl apply -f config-maps.yaml
     - kubectl apply -f secrets.yaml
 11. After running this command, we will then deploy the services to the clutser using:
     - kubectl apply -f bestbuy-all-in-one.yaml
-12. This will then deploy all the applications in pods. In order to access the store front and store admin, we can go into services Ingression and then access them by clicking on the IP addresses present there for these services. 
+12. This will then deploy all the applications in pods. In order to access the store front and store admin, they are exposed using Load Balancer. We can go into services Ingression and then access them by clicking on the IP addresses present there for these services.
+
+- To deploy all services together bestbuy-all-in-one.yaml file is used which can be found in Deployment Files folder of this repository.
+- Each service can deployed individually as well using kubectl -f apply <<service specific yaml file>> which are also present in the same folder.  
 
 ## Table of Microservice Repositories:
 
