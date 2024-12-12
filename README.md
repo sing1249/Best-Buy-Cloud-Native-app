@@ -1,4 +1,5 @@
 # Project - Building a Cloud-Native App for Best Buy
+## Talwinder Singh - 040952048
 
 ## Application Architecture
 The following diagram represents the architecture of the app and how the services are connected:
