@@ -40,7 +40,7 @@ To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these
    - Add the encoded value to `secrets.yaml` under the  OPENAI_API_KEY seciton.
 
 ### Deploying Services
-1. Connect to the AKS cluster via Azure Portal using the provided commands.
+1. Connect to the AKS cluster via Azure Portal using the provided commands given in the connect section of AKS blade in Azure.
 2. Switch to the directory Deployment Files in this repository.
 3. Apply the configuration files:
    - Deploy config maps and secrets:
