@@ -1,38 +1,65 @@
 # Project - Building a Cloud-Native App for Best Buy
 
 ## Application Architecture
-The following diagram shown represents the architecture of the app and how the services are connected to each other. 
+The following diagram represents the architecture of the app and how the services are connected:
 
 ![ApplicationArchitecture](ApplicationArchitecture.png)
 
+## Application and Architecture Explanation
+The architecture represents receiving orders and completing them for Best Buy. Below is an explanation of how the services interact:
 
-## Application and Architecture Explanation:
-The architecture represents the receivibg orders and completing the orders for Best Buy. In the diagram, store-front is used by employees to add orders in cart and then they are sent to order-service which is then connected to a managed backend service which is Azure Service Bus.
-The store-front fetches orders from product-service which acts as a database for all products Best Buy sells.
-Store-admin which is a service used by the company to manage products and manage/complete orders is also connected to product-service. If there is a new product that needs to be added it can be done using store-admin. The store-admin is connected to makeline service which is responsible for sending all completed orders that get completed using store-admin service and storing them into Order Database hosted on managed service (Mongo DB)
-AI-service is used to help create description of new products and images for the products. Store-admin has an integrated section to add products and if we add products we can add description by using keywords and generate images for products as well. Ai-service uses two AI models, Dall-e-3 and gpt-4 which are hosted using Azure Open AI service. 
+1. **Store-Front**: Used by employees to add orders to the cart. Orders are sent to `order-service` via a managed backend service (Azure Service Bus).
+2. **Product-Service**: Acts as a database for all products Best Buy sells. The `store-front` fetches products from this service.
+3. **Store-Admin**: Used by the company to manage products and complete orders. It connects to `product-service` to add new products and `makeline-service` to store completed orders in the **Order Database** (MongoDB).
+4. **AI-Service**: Helps generate descriptions and images for new products. It integrates with `store-admin`, using Azure OpenAI services (DALL-E-3 and GPT-4) to generate content.
 
-## Deployment Instructions:
-In order to deploy the above structure, we will be using Azure Kubernetes Service (AKS). A single yaml deployment file that can be found in Deployment Files folder in this repository will be used. It is named as bestbuy-all-in-one.yaml. 
-Steps for deployment:
-1. Instead of using the Azure Service Bus, we will be using RabbitMQ.
-2. First we will set up the AI services and AKS cluster in Azure Portal.
-3. A resource group Project2 was created in Azure Portal, and then we configured in AKS cluster in it.
-4. The cluster had 1 systemnodes and 2 workernodes. We configured manual scaling for them.
-5. Then Open AI resource was created in the same resource group. After the resource was created, we went into to deploy 2 deployments in this resource. One deployment will be gpt-4 and then other one would be dall-e-3. These services will be used to generate description and images for new products that can be added to Best Buy app.
-6. After the deployment of AI deployments, then the Endpoint was added under the env section of the AI service in the bestbuy-all-in-one.yaml file which in available in Deployment Files folder.
-7. The key was copied and then base encoded 64 using echo -n "key" | base64.
-8. The encoded value was added to the secrets.yaml file.
-9. After this was done, we are now ready to connect to the cluster. It was connected by using the commands given in the connect section in Azure Portal under the cluster we just created.
-10. After successful connection, switch the working directory to Deployment Files, if not done already, and then we then ran the command to deploy config maps and secrets in the cluster.
-    - kubectl apply -f config-maps.yaml
-    - kubectl apply -f secrets.yaml
-11. After running this command, we will then deploy the services to the clutser using:
-    - kubectl apply -f bestbuy-all-in-one.yaml
-12. This will then deploy all the applications in pods. In order to access the store front and store admin, they are exposed using Load Balancer. We can go into services Ingression and then access them by clicking on the IP addresses present there for these services.
+## Deployment Instructions
+To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these steps:
 
-- To deploy all services together bestbuy-all-in-one.yaml file is used which can be found in Deployment Files folder of this repository.
-- Each service can deployed individually as well using kubectl -f apply <<service specific yaml file>> which are also present in the same folder.  
+### Setting Up the Cluster
+1. Create a resource group in Azure Portal (e.g., **Project2**).
+2. Configure an AKS cluster:
+   - 1 system node
+   - 2 worker nodes
+   - Manual scaling enabled
+
+### Configuring AI Services
+1. Deploy Azure OpenAI resources in the same resource group.
+2. Add two deployments:
+   - **GPT-4** for generating descriptions.
+   - **DALL-E-3** for generating images.
+3. Obtain the endpoint and API key:
+   - Add the endpoint to the environment variables of the `ai-service` in `bestbuy-all-in-one.yaml`.
+   - Base64 encode the API key using:
+     ```bash
+     echo -n "key" | base64
+     ```
+   - Add the encoded value to `secrets.yaml`.
+
+### Deploying Services
+1. Connect to the AKS cluster via Azure Portal using the provided commands.
+2. Switch to the directory containing the deployment files.
+3. Apply the configuration files:
+   - Deploy config maps and secrets:
+     ```bash
+     kubectl apply -f config-maps.yaml
+     kubectl apply -f secrets.yaml
+     ```
+   - Deploy all services using:
+     ```bash
+     kubectl apply -f bestbuy-all-in-one.yaml
+     ```
+4. Expose `store-front` and `store-admin` services via Load Balancer. Access them using the IP addresses provided in the Azure Portal under Services > Ingress.
+
+### Deploying Individual Services
+Each service can be deployed individually using its specific YAML file:
+```bash
+kubectl apply -f <service-specific-file>.yaml
+```
+
+## Youtube video link
+This the link for youtube video demo:
+https://youtu.be/UQa1D2H8C0E 
 
 ## Table of Microservice Repositories:
 
@@ -60,10 +87,6 @@ Steps for deployment:
 | **Store Front**     | [sing1249/store-front](https://hub.docker.com/repository/docker/sing1249/store-front/tags) |
 
 
-
-
-## Youtube video link
-https://youtu.be/UQa1D2H8C0E 
 
 ## Bonus Task: Implement a CI/CD Pipeline for Each Microservice 
 The pipeline will push a new docker image and deploy a new container using that new image. This will take place without the service being down. 
