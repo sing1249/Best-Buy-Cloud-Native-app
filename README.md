@@ -43,6 +43,27 @@ AI-service is used to help create description of new products and images for the
 https://youtu.be/UQa1D2H8C0E 
 
 ## Bonus Task: Implement a CI/CD Pipeline for Each Microservice 
+The pipeline will push a new docker image and deploy a new container using that new image. This will take place without the service being down. 
+In order to implement a CI/CD pipeline, we will first add our secrets and variables in each repostiories. 
+The secrest will be added in Github for each repository.
+In order to add them we will follow these steps:
+1. We will go to settings for each repository
+2. And then go to Secrets and Variable and then Action
+3. Under the secrets we will add these 3 secrets:
+- DOCKER_USERNAME - This represents my docker username
+- DOCKER_PASSWORD - This represents my docker password
+- KUBE_CONFIG_DATA - This is obtained by using the following commands. In my case I used these commands. 
+"kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml"
+"cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt"
+4. Under variables, we will add 3 variables:
+- CONTAINER_NAME - Any container name we want to give, for example store-admin
+- DEPLOYMENT_NAME - Name of the deployment we want to give, for example store-admin
+- DOCKER_IMAGE_NAME - This will be the new name of docker image that will be created after a new push is pushed to github.
+
+### Screenshots showing the implementation:
+![](Screenshots/newpush.png)
+![](Screenshots/successful.png)
+![](Screenshots/newimage.png)
 
 ## Issues or limitations in the implementation:
 I was not able to connect the services using Azure service bus, for this I have tried changing the docker files to include env variables for Azure Service bus, modified the env variables in order-service and makeline-service and ensured they get the base64 encoded secret for Azure Service Bus from secrets.yaml but the solution did not work.
@@ -58,5 +79,12 @@ To overcome this I used kubectl logs "pod name" which showed me that there was a
 The Open AI resource was then deployed in the CDO subscription but since I had insufficient quota I could not deploy dall-e-3 and could only do dall-e-2 but when I chose dall-e-2 gpt-4 could not be deployed as they were available in different region so I chose dall-e-2 and gpt-40 and then that worked for me. 
 ![](Screenshots/Quota.png)
 
-### Deployment fail for some services
+### AI Image issue ???
+
+### Kube Config Data Length:
+When I was obtaiting the kube config data and putting it in Github, the length was too long. After some research I found it was showing the data for all the clusters. So in order to get the data for current cluster I used the following commands:
+"kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml"
+"cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt"
+
+### Bonus: Deployment fail for some services
 I deleted the AKS cluster after 1-2 services to avoid any charges, because I had to do multiple attempts in making AKS, I wanted to minimize the cost as much as I could that is why some services might show deployment failed.
