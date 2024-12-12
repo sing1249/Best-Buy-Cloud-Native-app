@@ -12,6 +12,23 @@ Store-admin which is a service used by the company to manage products and manage
 AI-service is used to help create description of new products and images for the products. Store-admin has an integrated section to add products and if we add products we can add description by using keywords and generate images for products as well. Ai-service uses two AI models, Dall-e-3 and gpt-4 which are hosted using Azure Open AI service. 
 
 ## Deployment Instructions:
+In order to deploy the above structure, we will be using Azure Kubernetes Service (AKS). A single yaml deployment file that can be found in Deployment Files folder in this repository will be used. It is named as bestbuy-all-in-one.yaml. 
+Steps for deployment:
+1. Instead of using the Azure Service Bus, we will be using RabbitMQ.
+2. First we will set up the AI services and AKS cluster in Azure Portal.
+3. A resource group Project2 was created in Azure Portal, and then we configured in AKS cluster in it.
+4. The cluster had 1 systemnodes and 2 workernodes. We configured manual scaling for them.
+5. Then Open AI resource was created in the same resource group. After the resource was created, we went into to deploy 2 deployments in this resource. One deployment will be gpt-4 and then other one would be dall-e-3. These services will be used to generate description and images for new products that can be added to Best Buy app.
+6. After the deployment of AI deployments, then the Endpoint was added under the env section of the AI service in the bestbuy-all-in-one.yaml file.
+7. The key was copied and then base encoded 64 using echo -n "key" | base64.
+8. The encoded value was added to the secrets.yaml file.
+9. After this was done, we are now ready to connect to the cluster. It was connected by using the commands given in the connect section in Azure Portal under the cluster we just created.
+10. After successful connection, we then ran the command to deploy config maps and secrets in the cluster.
+    - kubectl apply -f config-maps.yaml
+    - kubectl apply -f secrets.yaml
+11. After running this command, we will then deploy the services to the clutser using:
+    - kubectl apply -f bestbuy-all-in-one.yaml
+12. This will then deploy all the applications in pods. In order to access the store front and store admin, we can go into services Ingression and then access them by clicking on the IP addresses present there for these services. 
 
 ## Table of Microservice Repositories:
 
