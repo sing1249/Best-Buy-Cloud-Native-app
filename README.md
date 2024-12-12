@@ -12,6 +12,7 @@ The architecture represents receiving orders and completing them for Best Buy. B
 2. **Product-Service**: Acts as a database for all products Best Buy sells. The `store-front` fetches products from this service.
 3. **Store-Admin**: Used by the company to manage products and complete orders. It connects to `product-service` to add new products and `makeline-service` to store completed orders in the **Order Database** (MongoDB).
 4. **AI-Service**: Helps generate descriptions and images for new products. It integrates with `store-admin`, using Azure OpenAI services (DALL-E-3 and GPT-4) to generate content.
+5. **Order-Service**: Order-service sends the order to order queue for them to be completed. 
 
 ## Deployment Instructions
 To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these steps:
@@ -88,34 +89,46 @@ https://youtu.be/UQa1D2H8C0E
 
 
 
-## Bonus Task: Implement a CI/CD Pipeline for Each Microservice 
-The pipeline will push a new docker image and deploy a new container using that new image. This will take place without the service being down. 
-In order to implement a CI/CD pipeline, we will first add our secrets and variables in each repostiories. 
-The secrest will be added in Github for each repository.
-In order to add them we will follow these steps:
-1. We will go to settings for each repository
-2. And then go to Secrets and Variable and then Action
-3. Under the secrets we will add these 3 secrets:
-- DOCKER_USERNAME - This represents my docker username
-- DOCKER_PASSWORD - This represents my docker password
-- KUBE_CONFIG_DATA - This is obtained by using the following commands. In my case I used these commands. 
-"kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml"
-"cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt"
-4. Under variables, we will add 3 variables:
-- CONTAINER_NAME - Any container name we want to give, for example store-admin
-- DEPLOYMENT_NAME - Name of the deployment we want to give, for example store-admin
-- DOCKER_IMAGE_NAME - This will be the new name of docker image that will be created after a new push is pushed to github.
+## Bonus Task: Implement a CI/CD Pipeline for Each Microservice
 
-### Screenshots showing the implementation:
-![](Screenshots/newpush.png)
-![](Screenshots/successful.png)
-![](Screenshots/newimage.png)
+The CI/CD pipeline ensures that a new Docker image is pushed and deployed as a container without causing any downtime. To implement the pipeline, secrets and variables must first be configured in each repository.
 
-## Issues or limitations in the implementation:
-I was not able to connect the services using Azure service bus, for this I have tried changing the docker files to include env variables for Azure Service bus, modified the env variables in order-service and makeline-service and ensured they get the base64 encoded secret for Azure Service Bus from secrets.yaml but the solution did not work.
-So I have finished the project using RabbitMQ instead. 
+### Steps to Add Secrets and Variables
+1. Navigate to the **Settings** of each GitHub repository.
+2. Go to **Secrets and Variables** → **Actions**.
+3. Add the following **secrets**:
+   - **DOCKER_USERNAME**: My Docker username.
+   - **DOCKER_PASSWORD**: My Docker password.
+   - **KUBE_CONFIG_DATA**: Obtained by running the following commands:
+     ```bash
+     kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml
+     cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt
+     ```
+4. Add the following **variables**:
+   - **CONTAINER_NAME**: Name of the container, e.g., `store-admin`.
+   - **DEPLOYMENT_NAME**: Name of the deployment, e.g., `store-admin`.
+   - **DOCKER_IMAGE_NAME**: Name of the new Docker image to be created after a GitHub push.
 
-### Quota for Dall-e-3
+### Screenshots of Implementation
+1. New Push Trigger:
+   ![New Push](Screenshots/newpush.png)
+2. Successful Deployment:
+   ![Successful Deployment](Screenshots/successful.png)
+3. New Docker Image Created:
+   ![New Docker Image](Screenshots/newimage.png)
+
+---
+
+## Issues or Limitations in the Implementation
+
+### Azure Service Bus Integration
+I faced challenges connecting services using Azure Service Bus. Despite making the following adjustments, the solution did not work:
+- Modified Dockerfiles to include environment variables for Azure Service Bus.
+- Updated `order-service` and `makeline-service` to use the base64-encoded secret for Azure Service Bus from `secrets.yaml`.
+
+As a workaround, I switched to **RabbitMQ**, which successfully connected the services.
+
+### Quota Limitation for DALL-E-3
 When I was initially doing the deployment, my pod kept crashing for AI-Service and it was showing "CrashLoopBackOff" error in AKS. After research, I figured the image might not be built properly or maybe the Open AI resource was not properly deployed. After rebuilding the image, when I went into deploying the dall-e-3 version again, it showed me that I had insufficient quota. 
 
 In order to overcome this, I tried creating the Open AI resource under my student subscription, and also tried creating AKS cluster under student subscription but the AKS cluster did not work properly as we can not choose 2 workernodes in it. 
@@ -123,14 +136,16 @@ So I tried deploying the AKS cluster and open AI in 2 different subscriptions. W
 To overcome this I used kubectl logs "pod name" which showed me that there was an authorization problem. 
 
 The Open AI resource was then deployed in the CDO subscription but since I had insufficient quota I could not deploy dall-e-3 and could only do dall-e-2 but when I chose dall-e-2 gpt-4 could not be deployed as they were available in different region so I chose dall-e-2 and gpt-40 and then that worked for me. 
-![](Screenshots/Quota.png)
+
+![Quota Error](Screenshots/Quota.png)
 
 
-
-### Kube Config Data Length:
-When I was obtaiting the kube config data and putting it in Github, the length was too long. After some research I found it was showing the data for all the clusters. So in order to get the data for current cluster I used the following commands:
-"kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml"
-"cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt"
+### Kube Config Data Length Issue
+When adding `KUBE_CONFIG_DATA` to GitHub, the data length was too long as it included all clusters. To resolve this, I extracted data for the current cluster using:
+```bash
+kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml
+cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt
+```
 
 ### Bonus: Deployment fail for some services
 I deleted the AKS cluster after 1-2 services to avoid any charges, because I had to do multiple attempts in making AKS, I wanted to minimize the cost as much as I could that is why some services might show deployment failed.
