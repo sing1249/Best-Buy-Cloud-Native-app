@@ -23,6 +23,8 @@ AI-service is used to help create description of new products and images for the
 | **Store Admin**     | https://github.com/sing1249/store-admin-bb.git |
 | **AI Service**      | https://github.com/sing1249/ai-service-bb.git |
 | **Store Front**     | https://github.com/sing1249/store-front-bb.git|
+| **RabbitMQ**        | https://github.com/sing1249/rabbitmq.git |
+| **MongoDB**         | https://github.com/sing1249/mongo.git |
 
 
 ## Table of Docker Images:
