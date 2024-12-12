@@ -102,7 +102,7 @@ To overcome this I used kubectl logs "pod name" which showed me that there was a
 The Open AI resource was then deployed in the CDO subscription but since I had insufficient quota I could not deploy dall-e-3 and could only do dall-e-2 but when I chose dall-e-2 gpt-4 could not be deployed as they were available in different region so I chose dall-e-2 and gpt-40 and then that worked for me. 
 ![](Screenshots/Quota.png)
 
-### AI Image issue ???
+
 
 ### Kube Config Data Length:
 When I was obtaiting the kube config data and putting it in Github, the length was too long. After some research I found it was showing the data for all the clusters. So in order to get the data for current cluster I used the following commands:
