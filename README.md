@@ -154,7 +154,7 @@ During the deployment of my AI service pod, I encountered a persistent `CrashLoo
 To address this, I used the provided AI service image from Lab 8 as a temporary solution. This decision came after exhausting all possible steps, such as debugging the code and reconfiguring the files, without success. I hope this approach is acceptable under the circumstances.
 Thank you for your understanding.
 
-[](Screenshots/Error_2.png)
+![](Screenshots/Error_2.png)
 
 ### Bonus: Deployment fail for some services
 I deleted the AKS cluster after 1-2 services to avoid any charges, because I had to do multiple attempts in making AKS, I wanted to minimize the cost as much as I could that is why some services might show deployment failed.
