@@ -52,7 +52,7 @@ To deploy the architecture, Azure Kubernetes Service (AKS) is used. Follow these
      ```bash
      kubectl apply -f bestbuy-all-in-one.yaml
      ```
-4. The `store-front` and `store-admin` services are exposed via Load Balancer as listed in the yaml file. They can be accessed  using the IP addresses provided in the Azure Portal under Services > Ingress.
+4. The `store-front` and `store-admin` services are exposed via Load Balancer as listed in the yaml file. They can be accessed  using the IP addresses provided in the Azure Portal under Services and Ingress.
 
 ### Deploying Individual Services
 Each service can be deployed individually using its specific YAML file:
@@ -148,6 +148,13 @@ When adding `KUBE_CONFIG_DATA` to GitHub, the data length was too long as it inc
 kubectl config view --minify --flatten --output yaml > kube_config_minimal.yaml
 cat kube_config_minimal.yaml | base64 -w 0 > kube_config_base64.txt
 ```
+
+### AI service image issues
+During the deployment of my AI service pod, I encountered a persistent `CrashLoopBackOff` status. Despite thorough troubleshooting efforts, including rebuilding the image and pushing it to the registry after forking and cloning the Lab 8 AI repository and not making any changes in the repository, the issue persisted. The new images I created for other services worked seamlessly, indicating the problem was isolated to the AI service.
+To address this, I used the provided AI service image from Lab 8 as a temporary solution. This decision came after exhausting all possible steps, such as debugging the code and reconfiguring the files, without success. I hope this approach is acceptable under the circumstances.
+Thank you for your understanding.
+
+[](Screenshots/Error_2.png)
 
 ### Bonus: Deployment fail for some services
 I deleted the AKS cluster after 1-2 services to avoid any charges, because I had to do multiple attempts in making AKS, I wanted to minimize the cost as much as I could that is why some services might show deployment failed.
